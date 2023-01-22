@@ -1,18 +1,31 @@
 <template>
   <form class="todo-form" @submit.prevent="submitTodo">
-    <input class="todo-form__input" type="text" v-model="todo" ref="inputRef" />
-    <input class="todo-form__submit-button" type="submit" />
+    <div class="todo-form-inner">
+      <input
+        class="todo-form__input"
+        type="text"
+        v-model="todoForm.value"
+        ref="inputRef"
+      />
+      <input class="todo-form__submit-button" type="submit" />
+    </div>
+    <p v-if="todoForm.error" class="todo-form__error-message">
+      {{ todoForm.error }}
+    </p>
   </form>
 </template>
 
 <script>
-import { ref, watch } from "vue";
+import { ref, watch, reactive } from "vue";
 
 export default {
   // * emit 명이 native event명과 같은 경우 문제 발생 sumbit(event), submit(value)
   emit: ["submitTodo"],
   setup(props, { emit }) {
-    const todo = ref("");
+    const todoForm = reactive({
+      value: "",
+      error: "",
+    });
     const inputRef = ref();
 
     watch(inputRef, () => {
@@ -22,12 +35,18 @@ export default {
     });
 
     const submitTodo = () => {
-      emit("submitTodo", todo.value);
-      todo.value = "";
+      if (!todoForm.value) {
+        todoForm.error = "할 일을 입력해주세요";
+        return;
+      }
+
+      emit("submitTodo", todoForm.value);
+      todoForm.value = "";
+      todoForm.error = "";
     };
 
     return {
-      todo,
+      todoForm,
       inputRef,
       submitTodo,
     };
@@ -38,9 +57,15 @@ export default {
 <style scoped lang="scss">
 .todo-form {
   display: flex;
-  gap: 8px;
+  flex-direction: column;
   padding: 20px;
   font-size: 18px;
+  gap: 4px;
+
+  &-inner {
+    display: flex;
+    gap: 8px;
+  }
 
   &__input {
     width: 80%;
@@ -61,6 +86,11 @@ export default {
     border: 0;
     border-radius: 4px;
     color: white;
+  }
+
+  &__error-message {
+    font-size: 12px;
+    color: red;
   }
 }
 </style>
