@@ -16,8 +16,8 @@ export default {
   setup() {
     const todos = reactive([]);
 
-    const handleSubmitTodo = (todo) => {
-      todos.push(todo);
+    const handleSubmitTodo = (value) => {
+      todos.push(value);
     };
 
     return {
