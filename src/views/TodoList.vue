@@ -2,9 +2,14 @@
   <h1 class="page-title">할 일 목록</h1>
   <TodoInput @submitTodo="handleSubmitTodo" />
 
-  <ul>
-    <TodoItem v-for="todo in todos" :key="todo" :todo="todo" />
-  </ul>
+  <ol>
+    <TodoItem
+      v-for="(todo, index) in todos"
+      :key="todo"
+      :todo="todo"
+      @removeTodo="() => handleRemoveTodo(index)"
+    />
+  </ol>
 </template>
 
 <script>
@@ -25,9 +30,14 @@ export default {
       todos.push(value);
     };
 
+    const handleRemoveTodo = (index) => {
+      todos.splice(index, 1);
+    };
+
     return {
       todos,
       handleSubmitTodo,
+      handleRemoveTodo,
     };
   },
 };
@@ -40,7 +50,9 @@ export default {
   margin-bottom: 16px;
 }
 
-ul {
-  list-style: inside;
+ol {
+  padding: 20px;
+  margin: auto;
+  list-style: decimal;
 }
 </style>

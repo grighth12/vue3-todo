@@ -1,9 +1,18 @@
 <template>
-  <li class="todo-item">{{ todo }}</li>
+  <li class="todo-item">
+    <div class="todo-item-inner">
+      <span>{{ todo }}</span>
+
+      <button class="todo-item__remove-button" @click="$emit('removeTodo')">
+        삭제
+      </button>
+    </div>
+  </li>
 </template>
 
 <script>
 export default {
+  emit: ["removeTodo"],
   props: {
     todo: String,
   },
@@ -11,8 +20,25 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .todo-item {
-  padding: 5px 20px;
+  height: max-content;
+  padding: 10px 15px;
+  &-inner {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__remove-button {
+    padding: 4px;
+    color: white;
+    background-color: red;
+    border: 0;
+    border-radius: 4px;
+
+    :focus-visible {
+      outline: 1px solid white;
+    }
+  }
 }
 </style>
